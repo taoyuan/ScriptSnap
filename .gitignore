@@ -24,4 +24,5 @@ coverage
 *.tsbuildinfo
 dist
 build
+dev-scripts
 .rollup.cache

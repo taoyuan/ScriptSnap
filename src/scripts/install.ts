@@ -1,27 +1,29 @@
-const URL = "http://localhost:3000/snap.js";
-const DOCUMENTATION_URL = "https://scriptsnap.mylaby.com/";
-const ICON = "cloud-download-alt";
-const COLOR = "blue";
+const URL = 'https://scriptsnap.mylaby.com/script.js';
+const DOCUMENTATION_URL = 'https://scriptsnap.mylaby.com/';
+const ICON = 'cloud-download-alt';
+const COLOR = 'blue';
+
 class SnapInstaller {
+  fileManager: FileManager;
+  documentsDirectory: string;
+
   constructor() {
     this.fileManager = FileManager.iCloud();
     this.documentsDirectory = this.fileManager.documentsDirectory();
   }
-  hashCode(input) {
+
+  hashCode(input: string): number {
     return (
       Array.from(input).reduce(
-        (accumulator, currentChar) =>
-          Math.imul(31, accumulator) + currentChar.charCodeAt(0),
+        (accumulator, currentChar) => Math.imul(31, accumulator) + currentChar.charCodeAt(0),
         0,
       ) >>> 0
     );
   }
-  async install(name, sourceUrl, documentationUrl, icon, color) {
+
+  async install(name: string, sourceUrl: string, documentationUrl: string, icon: string, color: string): Promise<void> {
     try {
-      const filePath = this.fileManager.joinPath(
-        this.documentsDirectory,
-        `${name}.js`,
-      );
+      const filePath = this.fileManager.joinPath(this.documentsDirectory, `${name}.js`);
       const req = new Request(sourceUrl);
       const code = await req.loadString();
       const hash = this.hashCode(code);
@@ -34,17 +36,17 @@ class SnapInstaller {
           `// source: ${sourceUrl}; docs: ${documentationUrl}; hash: ${hash};\n\n${code}`,
       );
       this.fileManager.write(filePath, codeToStore);
-      const selfFilePath = this.fileManager.joinPath(
-        this.documentsDirectory,
-        `${Script.name()}.js`,
-      );
+      const selfFilePath = this.fileManager.joinPath(this.documentsDirectory, `${Script.name()}.js`);
       this.fileManager.remove(selfFilePath);
-      const callback = new CallbackURL("scriptable:///run");
-      callback.addParameter("scriptName", "Snap");
+      const callback = new CallbackURL('scriptable:///run');
+      callback.addParameter('scriptName', 'Snap');
       await callback.open();
     } catch (error) {
       console.error(`Failed to install script: ${error}`);
     }
   }
 }
-await new SnapInstaller().install("Snap", URL, DOCUMENTATION_URL, ICON, COLOR);
+
+await new SnapInstaller().install('Snap', URL, DOCUMENTATION_URL, ICON, COLOR);
+
+export {};
