@@ -1,0 +1,25 @@
+{
+  "__comments__": [
+    "tsconfig.build.json is used by eslint to constrain files to be checked",
+    "tsconfig.json is used by tsc"
+  ],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "allowJs": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "target": "es2018",
+    "module": "esnext"
+  },
+  "include": [
+    "**/.eslintrc.js",
+    "**/*.js",
+    "**/*.ts"
+  ],
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.d.ts",
+    "coverage"
+  ]
+}
